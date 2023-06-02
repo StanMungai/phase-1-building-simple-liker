@@ -6,24 +6,52 @@ const FULL_HEART = '♥'
 const modal = document.getElementById('modal')
 modal.classList.add('hidden')
 
-const heart = document.querySelector('.like-glyph')
-heart.addEventListener('click', () => {
-  const res = mimicServerCall()
-  if (res) {
-    console.log(res)
-  }
+const hearts = document.querySelectorAll('.like-glyph')
 
-  // if (mimicServerCall()) {
-  //   mimicServerCall()
-  //   .then( (error) => error)
-  //   .catch( () => {
-  //     modal.classList.remove('hidden')
-  //   })
-  // }
-  // else {
-  //   heart.classList.add('activated-heart')
-  // }
-})
+function likeButton(e) {
+  const heart = e.target;
+  // console.log(heart)
+  mimicServerCall("bogusUrl")
+    .then( () => {
+      if (heart.innerText === EMPTY_HEART) {
+        heart.innerText = FULL_HEART;
+        heart.className = "activated-heart"
+      } else {
+        heart.innerText = EMPTY_HEART
+        heart.className = ""
+      }
+    })
+    .catch( () => {
+      // const modal = document.getElementById("modal")
+      // modal.className = ""
+      // modal.innerText = error;
+      setTimeout(() => {
+        modal.classList.remove('hidden')
+        modal.innerText = error;
+      }, 3000)
+    })
+}
+
+for (const heart of hearts) {
+  heart.addEventListener('click', likeButton)
+}
+
+// heart.addEventListener('click', () => {
+//   mimicServerCall().then( resp => resp.json() )
+//   .then( data => console.log(data) )
+//   .catch( error => console.log(error.message) )
+
+//   if (mimicServerCall()) {
+//     mimicServerCall()
+//     .then( (error) => error)
+//     .catch( () => {
+//       modal.classList.remove('hidden')
+//     })
+//   }
+//   else {
+//     heart.classList.add('activated-heart')
+//   }
+// })
 
 
 
